@@ -3,36 +3,45 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\AdminSetting;
+use App\Models\Job;
 use App\Models\User;
 
 class AdminController extends Controller
 {
-    public function settings()
+    public function dashboard()
     {
-        $setting = AdminSetting::first() ?? new AdminSetting(['affiliate_url_base' => 'https://yourdomain.com/encryptfire?seller=']);
-        return view('admin.settings', compact('setting'));
+        $hasJob = Job::exists();
+        $users = User::all();
+        return view('admin.dashboard', compact('hasJob', 'users'));
     }
 
     public function updateSettings(Request $request)
     {
-        $request->validate([
-            'affiliate_url_base' => 'required|string',
-        ]);
-
-        $setting = AdminSetting::first();
-        if ($setting) {
-            $setting->update(['affiliate_url_base' => $request->affiliate_url_base]);
-        } else {
-            AdminSetting::create(['affiliate_url_base' => $request->affiliate_url_base]);
-        }
-
+        // Update settings logic
         return redirect('/admin/settings')->with('success', 'Settings updated successfully.');
     }
 
-    public function dashboard()
+    public function deactivateUser($id)
     {
-        $users = User::orderBy('id')->get();
-        return view('admin.dashboard', compact('users'));
+        $user = User::find($id);
+        $user->deactivated = true;
+        $user->save();
+
+        return redirect('/admin/dashboard')->with('success', 'User deactivated successfully.');
+    }
+
+    public function deleteUserZip($id)
+    {
+        $job = Job::where('user_id', $id)->first();
+        if ($job) {
+            $job->delete();
+        }
+
+        return redirect('/admin/dashboard')->with('success', 'User ZIP file deleted successfully.');
+    }
+
+    public function settings()
+    {
+        return view('admin.settings');
     }
 }

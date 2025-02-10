@@ -1,6 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
+@extends('layouts.app')
+
+@section('title', 'Download Status')
+
+@section('content')
     <title>Status</title>
 </head>
 <body>
@@ -12,5 +14,4 @@
     @if(isset($result['message']))
         <p>Message: {{ $result['message'] }}</p>
     @endif
-</body>
-</html>
+@endsection

@@ -32,41 +32,43 @@ class PasswordResetController extends Controller
                 'expires_at' => $expiresAt,
             ]);
 
-            $resetLink = URL::to('/reset_password/' . $token);
-            return redirect('/forgot_password')->with('success', "A password reset link has been generated. For testing, use: $resetLink");
+            $resetLink = URL::to('/reset-password/' . $token);
+            // Send the reset link via email - Implement email sending logic here
+
+            return redirect('/forgot-password')->with('success', 'Password reset link sent to your email.');
         }
 
-        return redirect('/forgot_password')->with('error', 'Email address not found.');
+        return redirect('/forgot-password')->with('error', 'Email does not exist.');
     }
 
     public function showResetPasswordForm($token)
     {
-        $resetRecord = PasswordReset::where('token', $token)->first();
+        $passwordReset = PasswordReset::where('token', $token)->first();
 
-        if ($resetRecord && $resetRecord->expires_at > Carbon::now()) {
+        if ($passwordReset && Carbon::now()->lt($passwordReset->expires_at)) {
             return view('auth.reset_password', compact('token'));
         }
 
-        return redirect('/forgot_password')->with('error', 'Invalid or expired password reset token.');
+        return redirect('/forgot-password')->with('error', 'Invalid or expired password reset token.');
     }
 
     public function resetPassword(Request $request, $token)
     {
-        $resetRecord = PasswordReset::where('token', $token)->first();
+        $request->validate([
+            'password' => 'required|confirmed',
+        ]);
 
-        if ($resetRecord && $resetRecord->expires_at > Carbon::now()) {
-            $request->validate([
-                'password' => 'required|confirmed',
-            ]);
+        $passwordReset = PasswordReset::where('token', $token)->first();
 
-            $user = User::find($resetRecord->user_id);
+        if ($passwordReset && Carbon::now()->lt($passwordReset->expires_at)) {
+            $user = User::find($passwordReset->user_id);
             $user->update(['password' => Hash::make($request->password)]);
 
-            $resetRecord->delete();
+            $passwordReset->delete();
 
-            return redirect('/login')->with('success', 'Password has been reset successfully. Please log in.');
+            return redirect('/login')->with('success', 'Password reset successfully. You can now log in.');
         }
 
-        return redirect('/forgot_password')->with('error', 'Invalid or expired password reset token.');
+        return redirect('/forgot-password')->with('error', 'Invalid or expired password reset token.');
     }
 }

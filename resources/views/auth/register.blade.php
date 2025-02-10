@@ -1,18 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
-</head>
-<body>
-    <form action="{{ url('/register') }}" method="post">
+@extends('layouts.app')
+
+@section('title', 'Register User')
+
+@section('content')
+    <h1>Register</h1>
+    @if($errors->any())
+        <div>
+            @foreach($errors->all() as $error)
+                <p>{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
+    <form action="/register" method="POST">
         @csrf
-        <input type="text" name="email" placeholder="Email" value="{{ old('email') }}">
-        @error('email') <div>{{ $message }}</div> @enderror
-        <input type="password" name="password" placeholder="Password">
-        @error('password') <div>{{ $message }}</div> @enderror
-        <input type="password" name="password_confirmation" placeholder="Confirm Password">
-        <input type="text" name="affiliate_id" placeholder="Affiliate ID" value="{{ old('affiliate_id') }}">
-        <button type="submit">Register</button>
+        <label for="email">Your Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        <label for="password">Password:&nbsp;</label>
+        <input type="password" id="password" name="password" required>&nbsp;&nbsp;
+        <label for="password_confirmation">Confirm Password:</label>
+        <input type="password" id="password_confirmation" name="password_confirmation" required>
+        <button type="submit" class="btn btn-primary">Register</button>
     </form>
-</body>
-</html>
+    <a href="/login">Already have an account? Login</a>
+@endsection

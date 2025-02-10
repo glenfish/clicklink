@@ -1,13 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
+@extends('layouts.app')
+
+@section('title', 'Forgot Password')
+
+@section('content')
     <title>Forgot Password</title>
 </head>
 <body>
-    <form action="{{ url('/forgot_password') }}" method="post">
+    <h1>Change Password</h1>
+    <form action="/forgot-password" method="POST">
         @csrf
-        <input type="text" name="email" placeholder="Email">
-        <button type="submit">Send Reset Link</button>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <button type="submit" class="btn btn-primary">Send Reset Link</button>
     </form>
-</body>
-</html
+@endsection

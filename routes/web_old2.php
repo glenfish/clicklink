@@ -28,13 +28,12 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Admin Routes
-Route::get('/admin/login', [AuthController::class, 'showAdminLoginForm'])->name('admin.login');
-Route::post('/admin/login', [AuthController::class, 'adminLogin']);
 Route::middleware(['auth:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
     Route::post('/admin/settings', [AdminController::class, 'updateSettings']);
     Route::post('/admin/deactivate-user/{id}', [AdminController::class, 'deactivateUser']);
     Route::post('/admin/delete-zip/{id}', [AdminController::class, 'deleteUserZip']);
     Route::get('/admin/settings', [AdminController::class, 'settings']);
+    Route::post('/admin/login', [AuthController::class, 'adminLogin']);
     Route::get('/admin/logout', [AuthController::class, 'adminLogout']);
 });
