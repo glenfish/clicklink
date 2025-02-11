@@ -38,6 +38,10 @@ class LoginController extends Controller
             return redirect('/login')->withErrors(['email' => 'Your account has been deactivated.']);
         }
 
+        if ($user && $user->status !== 'active') {
+            return redirect('/login')->withErrors(['email' => 'Your account is not active.']);
+        }
+
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {

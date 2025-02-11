@@ -3,7 +3,6 @@
 @section('content')
     <h1 class="mt-5">Admin Dashboard</h1>
     
-
     <div class="alert alert-info" role="alert">
         <p>{{ $hasJob ? 'Account requests pending.' : 'No pending action required.' }}</p>
     </div>
@@ -16,6 +15,7 @@
                 <th>ID</th>
                 <th>Email</th>
                 <th>Affiliate ID</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -25,6 +25,7 @@
                 <td>{{ $user->id }}</td>
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->affiliate_id }}</td>
+                <td>{{ $user->status === 'active' ? 'approved' : $user->status }}</td>
                 <td>
                     @if(!$user->deactivated)
                         <form action="{{ url('/admin/deactivate-user/'.$user->id) }}" method="POST" style="display: inline;">

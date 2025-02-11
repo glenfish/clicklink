@@ -3,9 +3,22 @@
 @section('title', 'User Dashboard')
 
 @section('content')
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Dashboard</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <h1 class="mt-5">User Dashboard</h1>
 
-    
     <h2>Update Account Email</h2>
     <p>Current Email: {{ $user->email }}</p>
     <form action="/user/update-email" method="POST">
@@ -19,6 +32,7 @@
     @if ($user->affiliate_id)
         <p>Current Affiliate ID: {{ $user->affiliate_id }}</p>
     @endif
+
     <form action="/user/update-affiliate-id" method="POST">
         @csrf
         <label for="affiliate_id">
@@ -30,18 +44,12 @@
         </button>
     </form>
 
-    
-    
-    <h2>Generate ZIP File</h2>
-    <p>{{ $hasJob ? 'Your ZIP file is being built.' : 'You have not generated a ZIP file yet.' }}</p>
-    <form action="/user/generate-zip" method="POST">
-        @csrf
-        <button type="submit" class="btn btn-primary">Generate ZIP File</button>
-    </form>
-
-    <br>
-    <a href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
+    @if ($user->affiliate_id)
+        <h2>Generate ZIP File</h2>
+        <p>{{ $hasJob ? 'Your ZIP file is being built.' : 'You have not generated a ZIP file yet.' }}</p>
+        <form action="/user/generate-zip" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-primary">Generate ZIP File</button>
+        </form>
+    @endif
 @endsection
