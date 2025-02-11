@@ -42,7 +42,7 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/admin/pending-users', [AdminController::class, 'showPendingUsers'])->name('admin.pending_users');
     Route::post('/admin/approve-user/{id}', [AdminController::class, 'approveUser'])->name('admin.approve');
     Route::post('/admin/deny-user/{id}', [AdminController::class, 'denyUser'])->name('admin.deny');
-    Route::get('/admin/logout', [AuthController::class, 'adminLogout'])->name('admin.logout');
+    Route::post('/admin/logout', [AuthController::class, 'adminLogout'])->name('admin.logout');
 });
 
 // Admin Login Route

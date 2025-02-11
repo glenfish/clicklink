@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('title', 'Admin Settings')
+@extends('layouts.admin')
 
 @section('content')
     <h1 class="mt-5">Admin Settings</h1>
