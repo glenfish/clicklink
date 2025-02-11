@@ -1,10 +1,8 @@
-@extends('layouts.app')
-
-@section('title', 'Admin Dashboard')
+@extends('layouts.admin')
 
 @section('content')
     <h1 class="mt-5">Admin Dashboard</h1>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
         <a class="navbar-brand" href="#">Admin</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -24,13 +22,13 @@
                 </li>
             </ul>
         </div>
-    </nav>
+    </nav> -->
     <form id="logout-form" action="{{ url('/admin/logout') }}" method="GET" style="display: none;">
         @csrf
     </form>
 
     <div class="alert alert-info" role="alert">
-        <p>{{ $hasJob ? 'There are jobs in the system.' : 'There are no jobs in the system.' }}</p>
+        <p>{{ $hasJob ? 'Account requests pending.' : 'No pending action required.' }}</p>
     </div>
 
     <h2>Manage Users</h2>
@@ -51,10 +49,14 @@
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->affiliate_id }}</td>
                 <td>
-                    <form action="{{ url('/admin/deactivate-user/'.$user->id) }}" method="POST" style="display: inline;">
-                        @csrf
-                        <button type="submit" class="btn btn-warning btn-sm">Deactivate</button>
-                    </form>
+                    @if(!$user->deactivated)
+                        <form action="{{ url('/admin/deactivate-user/'.$user->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-warning btn-sm">Deactivate</button>
+                        </form>
+                    @else
+                        <button class="btn btn-secondary btn-sm" disabled>Deactivated</button>
+                    @endif
                     <form action="{{ url('/admin/delete-zip/'.$user->id) }}" method="POST" style="display: inline;">
                         @csrf
                         <button type="submit" class="btn btn-danger btn-sm">Delete ZIP</button>

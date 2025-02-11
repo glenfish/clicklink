@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Admin Routes
 Route::middleware(['auth:admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [AdminController::class, 'showDashboard'])->name('admin.dashboard');
     Route::get('/admin/settings', [AdminController::class, 'settings'])->name('admin.settings');
     Route::post('/admin/settings', [AdminController::class, 'updateSettings']);
     Route::post('/admin/deactivate-user/{id}', [AdminController::class, 'deactivateUser']);
@@ -44,7 +44,3 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::post('/admin/deny-user/{id}', [AdminController::class, 'denyUser'])->name('admin.deny');
     Route::get('/admin/logout', [AuthController::class, 'adminLogout'])->name('admin.logout');
 });
-
-// Admin Login Route
-Route::get('/admin/login', [AdminController::class, 'showAdminLoginForm'])->name('admin.login');
-Route::post('/admin/login', [AdminController::class, 'adminLogin']);

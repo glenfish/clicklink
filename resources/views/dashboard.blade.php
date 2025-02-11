@@ -4,6 +4,7 @@
 
 @section('content')
     <h1 class="mt-5">User Dashboard</h1>
+
     
     <h2>Update Account Email</h2>
     <p>Current Email: {{ $user->email }}</p>
@@ -38,7 +39,7 @@
         <button type="submit" class="btn btn-primary">Generate ZIP File</button>
     </form>
 
-    
+    <br>
     <a href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
     <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
         @csrf
